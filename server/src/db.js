@@ -77,7 +77,7 @@ function baseModel(tableName, columns) {
         ]);
       });
     },
-    selectAll(query) {
+    selectAll(query = {}) {
       let wheres = "";
       let params = [];
       for (let k in query) {
@@ -93,10 +93,9 @@ function baseModel(tableName, columns) {
         }
 
       }
-      wheres = wheres.substring(4);
       return new Promise((resolve, reject) => {
         db.all.apply(db, [
-          `select * from ${tableName} where ${wheres}`,
+          `select * from ${tableName} ${wheres && "where "} ${wheres.substring(4)}`,
           ...params,
           (err, res) => {
             if (err) {
@@ -111,6 +110,17 @@ function baseModel(tableName, columns) {
 }
 
 const User = baseModel("user", ["id", "name"]);
+
+if (!module.parent) {
+  console.log("Init...");
+  db.run(`
+    create table user(
+      id text, name text
+    )
+  `, (err, res) => {
+    console.log(err, res);
+  });
+}
 
 module.exports = {
   User
