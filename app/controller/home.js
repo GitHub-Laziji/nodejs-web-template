@@ -13,7 +13,7 @@ class HomeController extends Controller {
 
   async index() {
     this.ctx.body = Response.success({
-      message: "hello"
+      message: "hello" + await User.selectCount()
     });
   }
 
