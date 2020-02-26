@@ -5,21 +5,24 @@
         <div style="width: 600px">
           <el-input style="width:100%"></el-input>
         </div>
-        <div style="width: 1000px">home</div>
+        <div style="width: 1000px">{{message}}</div>
       </el-card>
     </div>
   </div>
 </template>
 
 <script>
-import { Http } from "../common/http";
 export default {
   data() {
     return {
-      
+      message:"loading"  
     };
   },
-  mounted() {},
+  mounted() {
+    this.$http.get("/home").then(result=>{
+      this.message = result.message;
+    })
+  },
   methods: {
     
   }
